@@ -10,6 +10,7 @@ export const ROOT_SELECTOR_REGEXP = /(:root)(?=\W|$)/;
 export const VIEW_TRANSITION_REGEXP = /^(::view-transition(?:-(?:new|old|group|image-pair))?\()/;
 export const REG_EXP_CHARACTERS_REG_EXP = /[.?*+^$[\]\\(){}|-]/g;
 export const LAST_WORD_CHARACTER_REG_EXP = /\w$/;
+export const QUOTED_KEYFRAMES_NAME_REG_EXP = /^(["'])(.*)\1$/;
 
 export enum TYPE {
     AT_RULE = 'atrule',

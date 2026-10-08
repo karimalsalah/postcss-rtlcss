@@ -6,7 +6,7 @@ Estate record: `docs/strategy/OSS-ADOPTION-2026-08-23.md` in `karimalsalah/stead
 ## What it is (verified live 2026-08-23)
 
 Apache-2.0 · 135★ · last push 2026-08-23 · not archived · not a fork.
-TypeScript, npm package, **2.2 MB** working tree, entry `src/index.ts`. A **PostCSS plugin** — it transforms LTR CSS into RTL/bidirectional CSS at build time.
+TypeScript, npm package, **1.5 MB** of tracked files in this checkout (measured 2026-10-08; the earlier 2.2 MB figure was not reproduced), entry `src/index.ts`. A **PostCSS plugin** — it transforms LTR CSS into RTL/bidirectional CSS at build time.
 
 ## Why we took it
 
@@ -30,7 +30,10 @@ steadywrk claims an **Arabic-first design position**, not a translated one. Live
 
 ## Required before any integration — the dry-run gate
 
-Nothing from this fork lands in steadywrk until all four pass:
+Nothing from this fork lands in steadywrk until all four pass.
+
+**Status (2026-10-08): open.** No item is recorded as complete in this repo. Item 2 has partial runtime-level evidence only: a transform run made no fs, net, dns or http calls for the options exercised. That is not an OS-level egress check.
+
 
 1. **Filesystem diff.** Snapshot `~/.claude`, `~/.cursor/mcp.json` (hash), and the home root **before and after** first run; diff. Do **not** rely on documentation claiming it writes nothing outside its own directory.
 2. **Egress check.** Confirm no network connections during a transform run (installation excluded).
@@ -51,4 +54,4 @@ This fork is very unlikely to misbehave. The control is applied anyway — a con
 
 ## Upstream
 
-`upstream` = `elchininet/postcss-rtlcss`. We track it; we do not push to it. Any fix worth contributing goes upstream as a normal PR under its Apache-2.0 terms.
+`origin` is `karimalsalah/postcss-rtlcss`. No upstream remote is configured in this checkout, so tracking `elchininet/postcss-rtlcss` is not in effect yet. To track it, run `git remote add upstream https://github.com/elchininet/postcss-rtlcss`. We do not push to upstream. Any fix worth contributing goes upstream as a normal PR under its Apache-2.0 terms.
