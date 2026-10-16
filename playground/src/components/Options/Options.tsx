@@ -1,4 +1,4 @@
-import React, { useEffect, JSX } from 'react';
+import React, { useEffect, type JSX } from 'react';
 import { Mode, Source } from 'postcss-rtlcss/options';
 import { useAppContext } from '@components/AppProvider';
 import { Switch } from '@components/Switch';

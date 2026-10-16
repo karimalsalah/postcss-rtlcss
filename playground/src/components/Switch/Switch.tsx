@@ -1,8 +1,8 @@
 import React, {
-    JSX,
+    type JSX,
     useState,
     useEffect,
-    ChangeEvent
+    type ChangeEvent
 } from 'react';
 import * as styles from './Switch.module.css';
 

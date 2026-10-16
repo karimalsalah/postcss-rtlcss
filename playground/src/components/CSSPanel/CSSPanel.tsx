@@ -1,7 +1,7 @@
 import React, {
     useEffect,
     useRef,
-    JSX
+    type JSX
 } from 'react';
 import { editor, css } from 'monaco-editor';
 import * as styles from './CSSPanel.module.css';
