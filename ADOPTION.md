@@ -34,6 +34,8 @@ Nothing from this fork lands in steadywrk until all four pass.
 
 **Status (2026-10-08): open.** No item is recorded as complete in this repo. Item 2 has partial runtime-level evidence only: a transform run made no fs, net, dns or http calls for the options exercised. That is not an OS-level egress check.
 
+**2026-10-16:** merged upstream `elchininet/postcss-rtlcss` master (7b2619c) and refreshed dev dependencies; the plugin source and runtime dependency (`rtlcss` 4.3.0) are unchanged by the merge. The dry-run gate below has not been run against this version and still needs running before any integration.
+
 
 1. **Filesystem diff.** Snapshot `~/.claude`, `~/.cursor/mcp.json` (hash), and the home root **before and after** first run; diff. Do **not** rely on documentation claiming it writes nothing outside its own directory.
 2. **Egress check.** Confirm no network connections during a transform run (installation excluded).
