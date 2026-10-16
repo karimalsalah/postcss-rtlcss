@@ -367,7 +367,7 @@ All the options are optional, and a default value will be used if any of them is
 
 ## mode
 
-The mode option has been explained in the [Output using the combined mode](#output-using-the-combined-mode-default), the [Output using the override mode](#output-using-the-override-mode), and the [Output using the diff mode](#output-using-the-diff-mode) sections. To avoid using magic strings, the package exposes an object with these values, but it is possible to use strings values anyway:
+The mode option has been explained in the [Output using the combined mode](#output-using-the-combined-mode-default-and-recommended), the [Output using the override mode](#output-using-the-override-mode), and the [Output using the diff mode](#output-using-the-diff-mode) sections. To avoid using magic strings, the package exposes an object with these values, but it is possible to use strings values anyway:
 
 ```javascript
 import postcss from 'postcss';

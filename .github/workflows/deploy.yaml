@@ -23,7 +23,9 @@ jobs:
           cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
       - name: Update npm
-        run: npm install -g npm@latest
+        run: npm install -g npm@11.20.0
+      # Publishing relies on npm trusted publishing (id-token): the package must list this
+      # workflow as a trusted publisher on npmjs.com.
       - name: Publish
         run: |
           pnpm install --ignore-scripts --prefer-offline

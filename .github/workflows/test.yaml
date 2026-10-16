@@ -23,11 +23,17 @@ jobs:
         run: pnpm install --ignore-scripts --prefer-offline
       - name: Linting files
         run: pnpm lint
+      - name: Build package
+        run: pnpm build
+      - name: Check built entry points
+        run: |
+          node -e "const plugin = require('.'); if (typeof plugin !== 'function') throw new Error('require() did not return a plugin function')"
+          node --input-type=module -e "const { default: plugin } = await import('postcss-rtlcss'); if (typeof plugin !== 'function') throw new Error('import() did not return a plugin function')"
       - name: Test playground build
         run: pnpm playground:build
       - name: Make coverage
         run: pnpm test --coverage
       - name: Coveralls
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action@8d6379e14d29928660c4ba802d8e85393440b329 # v2.3.8
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

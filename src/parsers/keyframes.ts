@@ -9,7 +9,8 @@ import { Source, ControlDirective } from '@types';
 import {
     TYPE,
     KEYFRAMES_NAME,
-    CONTROL_DIRECTIVE
+    CONTROL_DIRECTIVE,
+    QUOTED_KEYFRAMES_NAME_REG_EXP
 } from '@constants';
 import {
     store,
@@ -80,9 +81,11 @@ export const parseKeyFrames = (css: Root): void => {
             );
             const atRuleFlipped = rootFlipped.first as AtRule;
 
-            const atRuleParams = node.params;
-            const ltr = `${atRuleParams}-${Source.ltr}`;
-            const rtl = `${atRuleParams}-${Source.rtl}`;
+            const quotedName = node.params.match(QUOTED_KEYFRAMES_NAME_REG_EXP);
+            const quote = quotedName ? quotedName[1] : '';
+            const atRuleParams = quotedName ? quotedName[2] : node.params;
+            const ltr = `${quote}${atRuleParams}-${Source.ltr}${quote}`;
+            const rtl = `${quote}${atRuleParams}-${Source.rtl}${quote}`;
             const sourceDirectiveValue = getSourceDirectiveValue(controlDirectives);
             
             node.params = (

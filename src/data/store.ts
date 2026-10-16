@@ -17,7 +17,11 @@ import {
     StringMap,
     PluginStringMap
 } from '@types';
-import { REG_EXP_CHARACTERS_REG_EXP, LAST_WORD_CHARACTER_REG_EXP } from '@constants';
+import {
+    REG_EXP_CHARACTERS_REG_EXP,
+    LAST_WORD_CHARACTER_REG_EXP,
+    QUOTED_KEYFRAMES_NAME_REG_EXP
+} from '@constants';
 import {
     isBoolean,
     isFunction,
@@ -114,12 +118,16 @@ const isStringMap = (stringMap: unknown): stringMap is PluginStringMap[] => {
 
 const isAcceptedProcessDeclarationPlugins = (plugins: unknown): plugins is DeclarationPlugin[] =>
     Array.isArray(plugins)
-    && plugins.every((plugin: DeclarationPlugin) =>
-        isString(plugin.name)
+    && plugins.every((plugin: DeclarationPlugin | null) =>
+        plugin !== null
+            && typeof plugin === 'object'
+            && isString(plugin.name)
             && isNumber(plugin.priority)
             && Array.isArray(plugin.processors)
-            && plugin.processors.every((processor: DeclarationPluginProcessor) =>
-                processor.expr instanceof RegExp
+            && plugin.processors.every((processor: DeclarationPluginProcessor | null) =>
+                processor !== null
+                && typeof processor === 'object'
+                && processor.expr instanceof RegExp
                 && isFunction(processor.action)
             )
     );
@@ -134,6 +142,19 @@ const spreadArrayOfStrings = (arr: string[], item: strings): string[] => {
     return isString(item)
         ? [...arr, item]
         : [...arr, ...item];
+};
+
+const isNonEmptyPrefix = (value: unknown): value is strings => {
+    if (!isStringOrArrayOfStrings(value)) {
+        return false;
+    }
+    const prefixes = spreadArrayOfStrings([], value);
+    return prefixes.length > 0 && prefixes.every((prefix: string): boolean => prefix !== '');
+};
+
+const unquoteKeyFramesName = (params: string): string => {
+    const quotedName = params.match(QUOTED_KEYFRAMES_NAME_REG_EXP);
+    return quotedName ? quotedName[2] : params;
 };
 
 const createRulesPrefixesRegExp = (options: PluginOptionsNormalized): RegExp => {
@@ -198,13 +219,13 @@ const normalizeOptions = (options: PluginOptions): PluginOptionsNormalized => {
     if (isBoolean(options.greedy)) {
         returnOptions.greedy = options.greedy;
     }
-    if (isStringOrArrayOfStrings(options.ltrPrefix)) {
+    if (isNonEmptyPrefix(options.ltrPrefix)) {
         returnOptions.ltrPrefix = options.ltrPrefix;
     }
-    if (isStringOrArrayOfStrings(options.rtlPrefix)) {
+    if (isNonEmptyPrefix(options.rtlPrefix)) {
         returnOptions.rtlPrefix = options.rtlPrefix;
     }
-    if (isStringOrArrayOfStrings(options.bothPrefix)) {
+    if (isNonEmptyPrefix(options.bothPrefix)) {
         returnOptions.bothPrefix = options.bothPrefix;
     }
     if (isFunction(options.prefixSelectorTransformer)) {
@@ -249,7 +270,12 @@ const normalizeOptions = (options: PluginOptions): PluginOptionsNormalized => {
             },
         }));
     }
-    if (options.aliases && isObjectWithStringKeys(options.aliases)) {
+    if (
+        options.aliases &&
+        typeof options.aliases === 'object' &&
+        !Array.isArray(options.aliases) &&
+        isObjectWithStringKeys(options.aliases)
+    ) {
         returnOptions.aliases = options.aliases;
     }
     return returnOptions;
@@ -271,14 +297,14 @@ const getKeyFramesStringMap = (keyframes: AtRulesObject[]): AtRulesStringMap => 
     const stringMap: AtRulesStringMap = {};
     keyframes.forEach((obj: AtRulesObject): void => {
         stringMap[obj.atRuleParams] = {
-            name: obj.atRule.params,
-            nameFlipped: obj.atRuleFlipped.params
+            name: unquoteKeyFramesName(obj.atRule.params),
+            nameFlipped: unquoteKeyFramesName(obj.atRuleFlipped.params)
         };
     });
     return stringMap;
 };
 
-const getKeyFramesRegExp = (stringMap: AtRulesStringMap): RegExp => new RegExp(`(^|[^\\w-]| )(${ Object.keys(stringMap).join('|') })( |[^\\w-]|$)`, 'g');
+const getKeyFramesRegExp = (stringMap: AtRulesStringMap): RegExp => new RegExp(`(^|[^\\w-]| )(${ Object.keys(stringMap).map((name: string): string => name.replace(REG_EXP_CHARACTERS_REG_EXP, '\\$&')).join('|') })( |[^\\w-]|$)`, 'g');
 
 const initKeyframesData = (): void => {
     store.keyframesStringMap = getKeyFramesStringMap(store.keyframes);

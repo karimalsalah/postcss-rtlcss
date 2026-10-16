@@ -11,7 +11,10 @@ import {
     StringMap,
     Mode
 } from '@types';
-import { RTL_COMMENT_REGEXP } from '@constants';
+import {
+    RTL_COMMENT_REGEXP,
+    REG_EXP_CHARACTERS_REG_EXP
+} from '@constants';
 import { store } from '@data/store';
 import {
     isAtRule,
@@ -292,7 +295,9 @@ export const parseRuleNames = (): void => {
         return hash;
     }, {});
 
-    const replaces = Object.keys(replaceHash).join('|');
+    const replaces = Object.keys(replaceHash)
+        .map((key: string): string => key.replace(REG_EXP_CHARACTERS_REG_EXP, '\\$&'))
+        .join('|');
     const replaceRegExp = store.options.greedy
         ? new RegExp(`(${replaces})`, 'g')
         : new RegExp(`\\b(${replaces})\\b`, 'g');

@@ -1,5 +1,18 @@
 # Changelog
 
+## [Unreleased]
+
+### Changed
+
+- The source is now ESM. The published package keeps both CommonJS (`require`) and ESM (`import`) entry points.
+
+### Fixed
+
+- Quoted `@keyframes` names work with `processKeyFrames`: names containing regex characters no longer throw, and quoted animation references are flipped.
+- Empty `ltrPrefix`, `rtlPrefix` and `bothPrefix` values fall back to their defaults instead of disabling flipping.
+- Regex characters in `stringMap` no longer throw when `processRuleNames` is enabled.
+- A `null` entry in `processDeclarationPlugins`, and non-object `aliases`, fall back to their defaults instead of throwing or misbehaving.
+
 ## [6.0.0] - 2026-03-29
 
 - Migrated to `TypeScript 6`, so the target of the library is now `es6` instead of the previous `es5`
