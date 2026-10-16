@@ -1,4 +1,4 @@
-import React, { JSX } from 'react';
+import React, { type JSX } from 'react';
 import { AppProvider } from '@components/AppProvider';
 import { Burger } from '@components/Burger';
 import { Header } from '@components/Header';

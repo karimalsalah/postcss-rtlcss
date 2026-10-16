@@ -1,8 +1,8 @@
 import React, {
-    JSX,
+    type JSX,
     useState,
     useEffect,
-    ChangeEvent
+    type ChangeEvent
 } from 'react';
 import classnames from 'classnames';
 import * as styles from './SwitchGroup.module.css';

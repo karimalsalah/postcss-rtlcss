@@ -1,4 +1,4 @@
-import React, { useCallback, JSX } from 'react';
+import React, { useCallback, type JSX } from 'react';
 import { Share } from '@icons/Share';
 import { useAppContext } from '@components/AppProvider';
 import { cssLines } from '@components/Playground/css';
